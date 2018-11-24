@@ -189,10 +189,11 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
                         presenter.sendFileMessage(ChatActivity.this, ChatActivity.this,
                                 "test file message",
                                 381
-                                , getUri(), null);
+                                , getUri(), null, null);
                         break;
                     case 3:
-                        presenter.uploadImage(ChatActivity.this, getUri());                    case 4:
+                        presenter.uploadImage(ChatActivity.this, getUri());
+                    case 4:
 //                        presenter.uploadFile(ChatSandBoxActivity.this, getUri());
                         break;
                     case 5:
@@ -279,7 +280,7 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
         String meta = JsonUtil.getJson(inviter);
 
         presenter.sendTextMessage("test at" + " " + new Date().getTime() + name
-                , 1199, meta, new ChatHandler() {
+                , 1199, null, meta, new ChatHandler() {
                     @Override
                     public void onSent(String uniqueId, long threadId) {
                         super.onSent(uniqueId, threadId);
@@ -461,7 +462,7 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
                 inviter.setName("sina");
                 String meta = JsonUtil.getJson(inviter);
                 presenter.editMessage(13530,
-                        "hi this is edit at" + new Date().getTime() + "by" + name,meta,null);
+                        "hi this is edit at" + new Date().getTime() + "by" + name, meta, null);
 
                 break;
             case 14:
@@ -492,7 +493,7 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
 
             presenter.connect(socketAddress,
                     "POD-Chat", serverName, TOKEN, ssoHost,
-                    platformHost, fileServer,typeCode);
+                    platformHost, fileServer, typeCode);
         }
     }
 

@@ -17,6 +17,7 @@ import com.fanap.podchat.model.ChatResponse;
 import com.fanap.podchat.model.ErrorOutPut;
 import com.fanap.podchat.model.FileImageUpload;
 import com.fanap.podchat.model.ResultThreads;
+import com.fanap.podchat.requestobject.RequestThread;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,13 +79,19 @@ public class ChatTest {
 
     @Test
     @MediumTest
-    public void getThreadList() {
+    public void getThread() {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        presenter.getThread(10, null, null, null,null);
+
+        RequestThread requestThread = new RequestThread.Builder().
+                count(2)
+                .creatorCoreUserId(2)
+                .build();
+        presenter.getThread(requestThread);
+
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
