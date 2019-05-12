@@ -207,6 +207,13 @@ import static com.fanap.podchat.util.ChatStateType.ChatSateConstant.CLOSING;
 import static com.fanap.podchat.util.ChatStateType.ChatSateConstant.CONNECTING;
 import static com.fanap.podchat.util.ChatStateType.ChatSateConstant.OPEN;
 
+/**
+ * @Comments For developers
+ * [Noticed] {Don't delete deprecated methods just make them private
+ * and delete @deprecated Annotation
+ * [Noticed]ChatHandler Its not useful yet.set it to null
+ * }
+ */
 public class Chat extends AsyncAdapter {
     private static Async async;
     private String token;
@@ -505,14 +512,16 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It Connects to the Async .
-     * <p>
-     * socketAddress {**REQUIRED**}
-     * platformHost  {**REQUIRED**}
-     * severName     {**REQUIRED**}
-     * appId         {**REQUIRED**}
-     * token         {**REQUIRED**}
-     * fileServer    {**REQUIRED**}
-     * ssoHost       {**REQUIRED**}
+     *
+     * @param requestConnect {
+     *                       socketAddress {**REQUIRED**}
+     *                       platformHost  {**REQUIRED**}
+     *                       severName     {**REQUIRED**}
+     *                       appId         {**REQUIRED**}
+     *                       token         {**REQUIRED**}
+     *                       fileServer    {**REQUIRED**}
+     *                       ssoHost       {**REQUIRED**}
+     *                       }
      */
     public void connect(RequestConnect requestConnect) {
         String platformHost = requestConnect.getPlatformHost();
@@ -559,6 +568,7 @@ public class Chat extends AsyncAdapter {
      * @param fileServer    {**REQUIRED**}  Address of the file server
      * @param ssoHost       {**REQUIRED**}  Address of the SSO Host
      */
+    @Deprecated
     public void connect(String socketAddress, String appId, String severName, String token,
                         String ssoHost, String platformHost, String fileServer, String typeCode) {
         try {
@@ -608,6 +618,7 @@ public class Chat extends AsyncAdapter {
      * @param threadId           Id of the destination thread
      * @param jsonSystemMetadata It should be Json,if you don't have metaData you can set it to "null"
      */
+    @Deprecated
     public String sendTextMessage(String textMessage, long threadId, Integer messageType, String jsonSystemMetadata
             , ChatHandler handler) {
 
@@ -694,7 +705,31 @@ public class Chat extends AsyncAdapter {
     }
 
     /**
-     * @param requestAddAdmin You can add or remove someone as admin to some thread set
+     * Its sent message but it gets Object as an attribute
+     *
+     * @param requestMessage {
+     *                       String textMessage : text of the message
+     *                       int messageType : type of the message
+     *                       String jsonMetaData : metadata of the message
+     *                       long threadId : The id of a thread that its wanted to send
+     *                       }
+     * @param handler        @param handler Its not useful yet.set it to null
+     */
+    public String sendTextMessage(RequestMessage requestMessage, ChatHandler handler) {
+        String textMessage = requestMessage.getTextMessage();
+        long threadId = requestMessage.getThreadId();
+        int messageType = requestMessage.getMessageType();
+        String jsonMetaData = requestMessage.getJsonMetaData();
+
+        return sendTextMessage(textMessage, threadId, messageType, jsonMetaData, handler);
+    }
+
+    /**
+     * @param requestAddAdmin {
+     *                        <p>
+     *                        }
+     *                        <p>
+     *                        You can add or remove someone as admin to some thread set
      *                        and roles to them
      *                        `setRoleOperation` could be `Add` or `remove`
      */
@@ -729,23 +764,6 @@ public class Chat extends AsyncAdapter {
         return uniqueId;
     }
 
-    /**
-     * Its sent message but it gets Object as an attribute
-     *
-     * @param requestMessage this object has :
-     *                       String textMessage {text of the message}
-     *                       int messageType {type of the message}
-     *                       String jsonMetaData {metadata of the message}
-     *                       long threadId {The id of a thread that its wanted to send  }
-     */
-    public String sendTextMessage(RequestMessage requestMessage, ChatHandler handler) {
-        String textMessage = requestMessage.getTextMessage();
-        long threadId = requestMessage.getThreadId();
-        int messageType = requestMessage.getMessageType();
-        String jsonMetaData = requestMessage.getJsonMetaData();
-
-        return sendTextMessage(textMessage, threadId, messageType, jsonMetaData, handler);
-    }
 
     /**
      * First we get the contact from server then at the respond of that
@@ -790,6 +808,7 @@ public class Chat extends AsyncAdapter {
      * @param systemMetaData [optional]
      * @param handler        it is for send file message with progress
      */
+    @Deprecated
     public String sendFileMessage(Activity activity, String description, long threadId
             , Uri fileUri, String systemMetaData, Integer messageType, ProgressHandler.sendFileMessage handler) {
         String uniqueId;
@@ -838,11 +857,12 @@ public class Chat extends AsyncAdapter {
      * This method first check the type of the file and then choose the right
      * server and send that
      * <p>
-     * description    Its the description that you want to send with file in the thread
-     * fileUri        Uri of the file that you want to send to thread
-     * threadId       Id of the thread that you want to send file
-     * systemMetaData [optional]
-     * handler        it is for send file message with progress
+     *
+     * @param requestFileMessage {description    Its the description that you want to send with file in the thread
+     *                           fileUri        Uri of the file that you want to send to thread
+     *                           threadId       Id of the thread that you want to send file
+     *                           systemMetaData [optional]}
+     * @param handler            handler        it is for send file message with progress
      */
     public String sendFileMessage(RequestFileMessage requestFileMessage, ProgressHandler.sendFileMessage handler) {
         long threadId = requestFileMessage.getThreadId();
@@ -1055,6 +1075,11 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It uploads image to the server just by pass image uri
+     *
+     * @param requestUploadImage {
+     *                           Activity activity
+     *                           Uri fileUri : Uri of the file
+     *                           }
      */
     public String uploadImage(RequestUploadImage requestUploadImage) {
         Activity activity = requestUploadImage.getActivity();
@@ -1062,6 +1087,17 @@ public class Chat extends AsyncAdapter {
         return uploadImage(activity, fileUri);
     }
 
+    /**
+     * @param requestUploadImage {
+     *                           Activity activity
+     *                           Uri fileUri : Uri of the file
+     *                           }
+     * @param handler            It has 3 listener{
+     *                           onProgressUpdate(String uniqueId, int bytesSent, int totalBytesSent, int totalBytesToSend)
+     *                           onError(String jsonError, ErrorOutPut error)
+     *                           onFinish(String imageJson, ChatResponse<ResultImageFile> chatResponse)
+     *                           }
+     */
     public String uploadImageProgress(RequestUploadImage requestUploadImage, ProgressHandler.onProgress handler) {
         Activity activity = requestUploadImage.getActivity();
         Uri fileUri = requestUploadImage.getFileUri();
@@ -1149,6 +1185,12 @@ public class Chat extends AsyncAdapter {
         return uniqueId;
     }
 
+    /**
+     * @param requestUploadFile {
+     *                          Activity activity
+     *                          Uri fileUri : Uri of the file
+     *                          }
+     */
     public String uploadFile(@NonNull RequestUploadFile requestUploadFile) {
         return uploadFile(requestUploadFile.getActivity(), requestUploadFile.getFileUri());
     }
@@ -1628,6 +1670,7 @@ public class Chat extends AsyncAdapter {
 
     /**
      * leaves the thread
+     *
      * @ param threadId id of the thread
      */
     public String leaveThread(RequestLeaveThread request, ChatHandler handler) {
@@ -3118,6 +3161,7 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It blocks the thread
+     *
      * @ param contactId id of the contact
      * @ param threadId  id of the thread
      * @ param userId    id of the user
@@ -3199,6 +3243,7 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It unblocks thread with three way
+     *
      * @ param blockId it can be found in the response of getBlockList
      * @ param userId Id of the user
      * @ param threadId Id of the thread
@@ -3251,6 +3296,7 @@ public class Chat extends AsyncAdapter {
     /**
      * If someone that is not in your contact list tries to send message to you
      * their spam value is true and you can call this method in order to set that to false
+     *
      * @ param long threadId Id of the thread
      */
     public String spam(RequestSpam request) {
@@ -3299,6 +3345,7 @@ public class Chat extends AsyncAdapter {
     /**
      * It gets the list of the contacts that is on block list
      */
+    @Deprecated
     public String getBlockList(Long count, Long offset, ChatHandler handler) {
 
         String uniqueId = generateUniqueId();
@@ -3345,7 +3392,13 @@ public class Chat extends AsyncAdapter {
 
 
     /**
-     * It gets the list of the contacts that is on block list
+     * It gets the list of the block list
+     *
+     * @param request {
+     *                ----- long count Number of the response
+     *                ----- long offset offset of the response
+     *                }
+     * @param handler Its not useful yet set it to null
      */
     public String getBlockList(RequestBlockList request, ChatHandler handler) {
         return getBlockList(request.getCount(), request.getOffset(), handler);
@@ -3426,23 +3479,21 @@ public class Chat extends AsyncAdapter {
     /**
      * Create the thread with message is just for  p to p.( Thread Type is int NORMAL = 0)
      *
+     * @param threadRequest {
+     *                      int type  : type of the thread
+     *                      String ownerSsoId :
+     *                      List<Invitee> invitees : List of invites
+     *                      String title;
+     *                      RequestThreadInnerMessage message {
+     *                      object of the inner message
+     *                      -------------  int type  type of the message  [Optional]
+     *                      -------------  String metadata  [Optional]
+     *                      -------------  String systemMetadata  [Optional]
+     *                      -------------  List<Long> forwardedMessageIds
+     *                      -------------  String text : text of the message
+     *                      }
+     *                      }
      * @return The first UniqueId is for create thread and the rest of them are for new message or forward messages
-     * Its have three kind of Unique Ids. One of them is for message. One of them for Create Thread
-     * and the others for Forward Message or Messages.
-     * <p>
-     * int type  Type of the Thread (You can have Thread Type from ThreadType.class)
-     * String ownerSsoId  [Optional]
-     * List<Invitee> invitees  you can add your invite list here
-     * String title  [Optional] title of the group thread
-     * <p>
-     * RequestThreadInnerMessage message{  object of the inner message
-     * <p>
-     * -------------  String text  text of the message
-     * -------------  int type  type of the message  [Optional]
-     * -------------  String metadata  [Optional]
-     * -------------  String systemMetadata  [Optional]
-     * -------------  List<Long> forwardedMessageIds  [Optional]
-     * }
      */
     public ArrayList<String> createThreadWithMessage(RequestCreateThread threadRequest) {
         List<String> forwardUniqueIds;
@@ -3544,6 +3595,7 @@ public class Chat extends AsyncAdapter {
      * description;
      * metadata;
      */
+    @Deprecated
     public String updateThreadInfo(long threadId, ThreadInfoVO threadInfoVO, ChatHandler handler) {
         String uniqueId;
         uniqueId = generateUniqueId();
@@ -3599,13 +3651,17 @@ public class Chat extends AsyncAdapter {
 
 
     /**
-     * It updates the information of the thread like
-     * image;
-     * name;
-     * description;
-     * metadata;
+     * It updates the information of the thread
+     *
+     * @param request {
+     *                String image : image of the thread
+     *                long threadId : Id of the thread
+     *                String name : Name of the thread
+     *                String description : Description of the thread
+     *                String metadata : Metadata of the thread
+     *                }
+     * @param handler Its not useful yet.
      */
-
     public String updateThreadInfo(RequestThreadInfo request, ChatHandler handler) {
         ThreadInfoVO threadInfoVO = new ThreadInfoVO.Builder().title(request.getName())
                 .description(request.getDescription())
@@ -3619,9 +3675,12 @@ public class Chat extends AsyncAdapter {
      * Get the participant list of specific thread
      * <p>
      *
-     * @ param long threadId id of the thread we want to get the participant list
-     * @ param long count number of the participant wanted to get
-     * @ param long offset offset of the participant list
+     * @param request {
+     *                *  long threadId : id of the thread we want to get the participant list
+     *                *  long count : number of the participant wanted to get
+     *                *  long offset : offset of the participant list
+     *                }
+     * @param handler It is not useful yet
      */
     public String getThreadParticipants(RequestThreadParticipant request, ChatHandler handler) {
 
@@ -3725,6 +3784,7 @@ public class Chat extends AsyncAdapter {
     /**
      * In order to send seen message you have to call this method
      */
+    @Deprecated
     public String seenMessage(long messageId, long ownerId, ChatHandler handler) {
         String uniqueId;
         uniqueId = generateUniqueId();
@@ -3766,7 +3826,13 @@ public class Chat extends AsyncAdapter {
     }
 
     /**
-     * In order to send seen message you have to call {@link #seenMessage(long, long, ChatHandler)}
+     * In order to send seen message you have to call this method
+     *
+     * @param request {
+     *                long messageId : id of the message
+     *                long ownerId :
+     *                }
+     * @param handler Its not useful yet
      */
     public String seenMessage(RequestSeenMessage request, ChatHandler handler) {
         long messageId = request.getMessageId();
@@ -3777,6 +3843,8 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It Gets the information of the current user
+     *
+     * @param handler Its not useful yet
      */
     public String getUserInfo(ChatHandler handler) {
         String uniqueId = generateUniqueId();
@@ -3838,6 +3906,7 @@ public class Chat extends AsyncAdapter {
     /**
      * It Mutes the thread so notification is set to off for that thread
      */
+    @Deprecated
     public String muteThread(long threadId, ChatHandler handler) {
         String uniqueId;
         JsonObject jsonObject;
@@ -3890,6 +3959,11 @@ public class Chat extends AsyncAdapter {
 
     /**
      * Mute the thread so notification is off for that thread
+     *
+     * @param request {
+     *                long threadId : id of the thread
+     *                }
+     * @param handler : its not useful yet. set it to null
      */
     public String muteThread(RequestMuteThread request, ChatHandler handler) {
         return muteThread(request.getThreadId(), handler);
@@ -3897,6 +3971,11 @@ public class Chat extends AsyncAdapter {
 
     /**
      * It Un mutes the thread so notification is on for that thread
+     *
+     * @param request {
+     *                long threadId : id of the thread
+     *                }
+     * @param handler : its not useful yet. set it to null
      */
     public String unMuteThread(RequestMuteThread request, ChatHandler handler) {
         String uniqueId;
@@ -3989,6 +4068,7 @@ public class Chat extends AsyncAdapter {
      * Message can be edit when you pass the message id and the edited
      * content in order to edit your Message.
      */
+    @Deprecated
     public String editMessage(int messageId, String messageContent, String systemMetaData, ChatHandler handler) {
         String uniqueId = generateUniqueId();
         try {
@@ -4034,6 +4114,13 @@ public class Chat extends AsyncAdapter {
     /**
      * Message can be edit when you pass the message id and the edited
      * content in order to edit your Message.
+     *
+     * @param request {
+     *                String messageContent : content of them message
+     *                long messageId : id of the message it wanted to be edit
+     *                String metaData : metaData of the message
+     *                }
+     * @param handler : its not useful yet. set it to null
      */
     public String editMessage(RequestEditMessage request, ChatHandler handler) {
         String uniqueId = generateUniqueId();
@@ -4084,10 +4171,24 @@ public class Chat extends AsyncAdapter {
         return uniqueId;
     }
 
+    /**
+     * Gets the list of the participant that the message has been delivered to them
+     *
+     * @param requestParams {
+     *                      long messageId : Id of the message
+     *                      }
+     */
     public String getMessageDeliveredList(RequestDeliveredMessageList requestParams) {
         return deliveredMessageList(requestParams);
     }
 
+    /**
+     * Gets the list of the participant that the message is seen
+     *
+     * @param requestParams {
+     *                      long messageId : Id of the message
+     *                      }
+     */
     public String getMessageSeenList(RequestSeenMessageList requestParams) {
         return seenMessageList(requestParams);
     }
@@ -4143,6 +4244,13 @@ public class Chat extends AsyncAdapter {
         this.ttl = ttl;
     }
 
+    /**
+     * Clears the history
+     *
+     * @param requestClearHistory {
+     *                            long threadId : id of the thread
+     *                            }
+     */
     public String clearHistory(RequestClearHistory requestClearHistory) {
         String uniqueId = generateUniqueId();
         long threadId = requestClearHistory.getThreadId();
@@ -4176,6 +4284,13 @@ public class Chat extends AsyncAdapter {
         return uniqueId;
     }
 
+    /**
+     * Gets list of the admin
+     *
+     * @param requestGetAdmin {
+     *                        long threadId : id of the thread
+     *                        }
+     */
     public String getAdminList(RequestGetAdmin requestGetAdmin) {
         String uniqueId = generateUniqueId();
         long threadId = requestGetAdmin.getThreadId();

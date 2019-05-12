@@ -45,6 +45,7 @@ public class RequestConnect extends BaseRequestObject {
             this.ssoHost = ssoHost;
         }
 
+
         @NonNull
         public RequestConnect build(){
             return new RequestConnect(this);
