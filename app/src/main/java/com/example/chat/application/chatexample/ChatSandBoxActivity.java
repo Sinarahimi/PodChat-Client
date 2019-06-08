@@ -306,7 +306,7 @@ public class ChatSandBoxActivity extends AppCompatActivity implements AdapterVie
     }
 
     public void unBlock() {
-        RequestUnBlock requestUnBlock = new RequestUnBlock.Builder(1382).build();
+        RequestUnBlock requestUnBlock = new RequestUnBlock.Builder().blockId(1382).build();
         presenter.unBlock(requestUnBlock, null);
 
 //        presenter.unBlock(1382L, new ChatHandler() {
@@ -727,9 +727,6 @@ public class ChatSandBoxActivity extends AppCompatActivity implements AdapterVie
     public void onUploadFile(View view) {
         if (getUri() != null) {
             presenter.uploadFileProgress(ChatSandBoxActivity.this, this, getUri(), new ProgressHandler.onProgressFile() {
-                @Override
-                public void onProgressUpdate(int bytesSent) {
-                }
 
                 @Override
                 public void onProgress(String uniqueId, int bytesSent, int totalBytesSent, int totalBytesToSend) {

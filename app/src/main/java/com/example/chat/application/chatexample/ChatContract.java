@@ -183,7 +183,6 @@ public interface ChatContract {
         String createThread(int threadType, Invitee[] invitee, String threadTitle, String description, String image
                 , String metadata);
 
-
         void getThreads(RequestThread requestThread, ChatHandler handler);
 
         void getThreads(Integer count, Long offset, ArrayList<Integer> threadIds, String threadName,
@@ -290,7 +289,7 @@ public interface ChatContract {
 
         void updateThreadInfo(RequestThreadInfo request, ChatHandler handler);
 
-        void deleteMessage(ArrayList<Long> messageIds, Boolean deleteForAll, ChatHandler handler);
+        void deleteMessage(Long messageIds, Boolean deleteForAll, ChatHandler handler);
 
         void deleteMessage(RequestDeleteMessage deleteMessage, ChatHandler handler);
 

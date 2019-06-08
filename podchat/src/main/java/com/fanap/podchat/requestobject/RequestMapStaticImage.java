@@ -20,7 +20,6 @@ public class RequestMapStaticImage  extends BaseRequestMapStImage {
 
     public static class Builder extends BaseRequestMapStImage.Builder<Builder>{
 
-
         @NonNull
         public RequestMapStaticImage build() {
             return new RequestMapStaticImage(this);

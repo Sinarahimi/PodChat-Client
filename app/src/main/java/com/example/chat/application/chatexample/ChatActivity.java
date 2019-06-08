@@ -40,7 +40,6 @@ import com.fanap.podchat.requestobject.RequestAddAdmin;
 import com.fanap.podchat.requestobject.RequestAddParticipants;
 import com.fanap.podchat.requestobject.RequestClearHistory;
 import com.fanap.podchat.requestobject.RequestCreateThread;
-import com.fanap.podchat.requestobject.RequestDeleteMessage;
 import com.fanap.podchat.requestobject.RequestDeliveredMessageList;
 import com.fanap.podchat.requestobject.RequestGetAdmin;
 import com.fanap.podchat.requestobject.RequestLocationMessage;
@@ -104,14 +103,15 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
     private static String appId = "POD-Chat";
 
     //Mehrara
-//    private String socketAddress = "ws://172.16.106.26:8003/ws"; // {**REQUIRED**} Socket Address
-//        private String socketAddress = "ws://172.16.106.221:8003/ws"; // {**REQUIRED**} Socket Address
-    private String socketAddress = "ws://172.16.110.131:8003/ws"; // {**REQUIRED**} Socket Address
+//    private String socketAddress = "ws://172.16.107.109:8003/ws"; // {**REQUIRED**} Socket Address
+    private String socketAddress = "ws://172.16.106.26:8003/ws"; // {**REQUIRED**} Socket Address
+    //        private String socketAddress = "ws://172.16.106.221:8003/ws"; // {**REQUIRED**} Socket Address
+//    private String socketAddress = "ws://172.16.110.131:8003/ws"; // {**REQUIRED**} Socket Address
     private String ssoHost = "http://172.16.110.76"; // {**REQUIRED**} Socket Address
     private String platformHost = "http://172.16.106.26:8080/hamsam/"; // {**REQUIRED**} Platform Core Address
     private String fileServer = "http://172.16.106.26:8080/hamsam/"; // {**REQUIRED**} File Server Address
-    private String serverName = "chat-server2";
-//            private String serverName = "chat-server";
+//        private String serverName = "chat-server2";
+    private String serverName = "chat-server";
     private String typeCode = null;
 
     private String fileUri;
@@ -395,6 +395,10 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
         String center = "35.7003510,51.3376472";
 
         RequestMapStaticImage staticImage = new RequestMapStaticImage.Builder()
+//                .height()
+//                .width()
+//                .zoom()
+//                .type()
                 .center(center)
                 .build();
         presenter.mapStaticImage(staticImage);
@@ -528,16 +532,16 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void deleteMessage() {
-        ArrayList<Long> msgIds = new ArrayList<>();
-        msgIds.add(34973L);
+//        ArrayList<Long> msgIds = new ArrayList<>();
+//        msgIds.add(34973L);
 //        msgIds.add(33125L);
-        RequestDeleteMessage requestDeleteMessage = new RequestDeleteMessage
-                .Builder()
-                .messageIds(msgIds)
-//                .deleteForAll(true)
-                .typeCode("5")
-                .build();
-        presenter.deleteMessage(requestDeleteMessage, null);
+//        RequestDeleteMessage requestDeleteMessage = new RequestDeleteMessage
+//                .Builder()
+//                .messageIds(msgIds)
+////                .deleteForAll(true)
+//                .typeCode("5")
+//                .build();
+        presenter.deleteMessage(34973L,true, null);
 
 //        presenter.deleteMessage(16804, true, new ChatHandler() {
 //            @Override
@@ -683,7 +687,6 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
                         super.onGetThreadParticipant(uniqueId);
                     }
                 });
-
 
 
                 break;
@@ -992,10 +995,6 @@ public class ChatActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onUploadFile(View view) {
         if (getUri() != null) {
             presenter.uploadFileProgress(ChatActivity.this, this, getUri(), new ProgressHandler.onProgressFile() {
-                @Override
-                public void onProgressUpdate(int bytesSent) {
-                }
-
                 @Override
                 public void onProgress(String uniqueId, int bytesSent, int totalBytesSent, int totalBytesToSend) {
                     runOnUiThread(new Runnable() {

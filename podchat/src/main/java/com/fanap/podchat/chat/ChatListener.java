@@ -193,4 +193,11 @@ public interface ChatListener {
 
     default void OnGetThreadAdmin(String content) {
     }
+
+    default void OnSetRuleToUser(String content) {
+    }
+
+    default void OnGetNotSeenDuration(String content) {
+
+    }
 }

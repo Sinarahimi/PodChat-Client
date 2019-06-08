@@ -52,6 +52,7 @@ public class ChatMessageType {
             Constants.SET_RULE_TO_USER,
             Constants.CLEAR_HISTORY,
             Constants.GET_THREAD_ADMINS,
+            Constants.GET_NOT_SEEN_DURATION
     })
 
     @Retention(RetentionPolicy.SOURCE)
@@ -93,6 +94,7 @@ public class ChatMessageType {
         int SET_RULE_TO_USER = 42;
         int CLEAR_HISTORY = 44;
         int SIGNAL_MESSAGE = 45;
+        int GET_NOT_SEEN_DURATION = 47;
         int GET_THREAD_ADMINS = 48;
         int ERROR = 999;
 

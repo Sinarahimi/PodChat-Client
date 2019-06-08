@@ -11,7 +11,6 @@ import com.fanap.podchat.ProgressHandler;
 import com.fanap.podchat.chat.Chat;
 import com.fanap.podchat.chat.ChatAdapter;
 import com.fanap.podchat.chat.ChatHandler;
-import com.fanap.podchat.chat.ChatListener;
 import com.fanap.podchat.mainmodel.History;
 import com.fanap.podchat.mainmodel.Invitee;
 import com.fanap.podchat.mainmodel.NosqlListMessageCriteriaVO;
@@ -83,19 +82,19 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
         chat = Chat.init(context);
 //        RefWatcher refWatcher = LeakCanary.installedRefWatcher();
 //        refWatcher.watch(chat);
-
-        chat.addListener(this);
-        chat.addListener(new ChatListener() {
-            @Override
-            public void onSent(String content, ChatResponse<ResultMessage> response) {
-
-            }
-        });
+//
+//        chat.addListener(new ChatListener() {
+//            @Override
+//            public void onSent(String content, ChatResponse<ResultMessage> response) {
+//
+//            }
+//        });
 
         chat.isCacheables(false);
         chat.isLoggable(true);
         chat.rawLog(true);
         chat.setSignalIntervalTime(2000);
+        chat.addListener(this);
 //        chat.setExpireAmount(180);
         this.activity = activity;
         this.context = context;
@@ -121,6 +120,12 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void retryUpload(RetryUpload retry, ProgressHandler.sendFileMessage handler) {
+
+//        RetryUpload retryUpload = new RetryUpload.Builder()
+//                .activity(activity)
+//                .uniqueId(uniqueId)
+//                .build();
+
         chat.retryUpload(retry, handler);
     }
 
@@ -218,16 +223,24 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void mapSearch(String searchTerm, Double latitude, Double longitude) {
+//        RequestMapSearch mapSearch = new RequestMapSearch.Builder(searchTerm,latitude,longitude)
+//                .build();
+//        chat.mapSearch(mapSearch);
         chat.mapSearch(searchTerm, latitude, longitude);
     }
 
     @Override
-    public void mapRouting(String origin, String originLng) {
-        chat.mapRouting(origin, originLng);
+    public void mapRouting(String origin, String destination) {
+
+//        RequestMapRouting requestMapRouting = new RequestMapRouting.Builder(origin,destination)
+//                .build();
+//        chat.mapRouting(requestMapRouting);
+        chat.mapRouting(origin, destination);
     }
 
     @Override
     public void mapStaticImage(RequestMapStaticImage request) {
+
         chat.mapStaticImage(request);
     }
 
@@ -266,6 +279,12 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void getContact(Integer count, Long offset, ChatHandler handler) {
+
+//        RequestGetContact requestGetContact = new RequestGetContact.Builder()
+//                .count()
+//                .offset()
+//                .build();
+//        chat.getContacts(requestGetContact,null);
         chat.getContacts(count, offset, handler);
     }
 
@@ -298,11 +317,23 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void replyFileMessage(RequestReplyFileMessage request, ProgressHandler.sendFileMessage handler) {
+
+//RequestReplyFileMessage replyFileMessage = new RequestReplyFileMessage
+//        .Builder(messageContent,threadId,messageId,fileUri,activity)
+//        .messageType()
+//        .systemMetaData()
+//        .build();
+
         chat.replyFileMessage(request, handler);
     }
 
     @Override
     public void replyMessage(RequestReplyMessage request, ChatHandler handler) {
+//        RequestReplyMessage requestReplyMessage = new RequestReplyMessage
+//                .Builder(messageContect,threadId,messageId)
+//                .messageType()
+//                .systemMetaData()
+//                .build();
         chat.replyMessage(request, handler);
     }
 
@@ -352,16 +383,37 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void addContact(String firstName, String lastName, String cellphoneNumber, String email) {
+
+//        RequestAddContact requestAddContact = new RequestAddContact.Builder()
+//                .firstName()
+//                .lastName()
+//                .cellphoneNumber()
+//                .email()
+//                .build();
+//        chat.addContact(requestAddContact);
+
         chat.addContact(firstName, lastName, cellphoneNumber, email);
     }
 
     @Override
     public void removeContact(long id) {
+//        RequestRemoveContact requestRemoveContact = new RequestRemoveContact.Builder(userId)
+//                .build();
+//        chat.removeContact(requestRemoveContact);
         chat.removeContact(id);
     }
 
     @Override
     public void searchContact(SearchContact searchContact) {
+//        SearchContact searchContact = new SearchContact
+//                .Builder(offset , size)
+//                .firstName()
+//                .lastName()
+//                .email()
+//                .id()
+//                .query()
+//                .typeCode()
+//                .build();
         chat.searchContact(searchContact);
     }
 
@@ -390,13 +442,7 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 //                .contactId()
 //                .threadId()
 //                .userId()
-//                .build();requestUnBlock = new RequestUnBlock.Builder()
-//                .blockId()
-//                .contactId()
-//                .threadId()
-//                .userId()
 //                .build();
-
         chat.unblock(request, handler);
     }
 
@@ -412,6 +458,13 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void getBlockList(Long count, Long offset, ChatHandler handler) {
+
+
+//        RequestBlockList requestBlockList = new RequestBlockList.Builder()
+//                .count()
+//                .offset()
+//                .build();
+//        chat.getBlockList(requestBlockList,null);
         chat.getBlockList(count, offset, handler);
     }
 
@@ -445,6 +498,9 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void forwardMessage(RequestForwardMessage request) {
+//        RequestForwardMessage requestForwardMessage = new RequestForwardMessage
+//                .Builder(threadId,messageIds)
+//                .build();
         chat.forwardMessage(request);
     }
 
@@ -455,11 +511,22 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void updateContact(RequestUpdateContact updateContact) {
+//        RequestUpdateContact requestUpdateContact = new RequestUpdateContact.Builder(userId)
+//                .firstName()
+//                .lastName()
+//                .cellphoneNumber()
+//                .email()
+//                .build();
         chat.updateContact(updateContact);
     }
 
     @Override
     public void uploadImage(Activity activity, Uri fileUri) {
+
+//        RequestGetImage requestGetImage = new RequestGetImage
+//                .Builder(imageId,hashCode,downloadable)
+//                .build();
+//        chat.getImage(requestGetImage);
 
 //        RequestUploadImage requestUploadImage = new RequestUploadImage.Builder(activity,fileUri)
 //                .build();
@@ -472,10 +539,15 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
     @Override
     public void uploadFile(@NonNull Activity activity, @NonNull Uri uri) {
 
+//        RequestGetFile requestGetFile = new RequestGetFile
+//                .Builder(fileId,hashCode,downloadable)
+//                .build();
+//        chat.getFile(requestGetFile);
+
         RequestUploadFile uploadFile = new RequestUploadFile.Builder(activity, uri)
                 .build();
         chat.uploadFile(uploadFile);
-        chat.uploadFile(activity, uri);
+//        chat.uploadFile(activity, uri);
     }
 
     @Override
@@ -495,6 +567,12 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void removeParticipants(RequestRemoveParticipants requestRemoveParticipants, ChatHandler handler) {
+
+
+//        RequestRemoveParticipants removeParticipants = new RequestRemoveParticipants
+//                .Builder(threadId,participantsId)
+//                .build();
+
         chat.removeParticipants(requestRemoveParticipants, handler);
     }
 
@@ -505,6 +583,11 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void addParticipants(RequestAddParticipants requestAddParticipants, ChatHandler handler) {
+
+
+//        RequestAddParticipants addParticipants = new RequestAddParticipants
+//                .Builder(threadId,contactIds)
+//                .build();
         chat.addParticipants(requestAddParticipants, handler);
     }
 
@@ -536,12 +619,16 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
     }
 
     @Override
-    public void deleteMessage(ArrayList<Long> messageIds, Boolean deleteForAll, ChatHandler handler) {
+    public void deleteMessage(Long messageIds, Boolean deleteForAll, ChatHandler handler) {
         chat.deleteMessage(messageIds, deleteForAll, handler);
     }
 
     @Override
     public void deleteMessage(RequestDeleteMessage deleteMessage, ChatHandler handler) {
+//        RequestDeleteMessage requestDeleteMessage = new RequestDeleteMessage.Builder()
+//                .messageIds()
+//                .deleteForAll()
+//                .build();
         chat.deleteMessage(deleteMessage, handler);
     }
 
@@ -573,6 +660,27 @@ public class ChatPresenter extends ChatAdapter implements ChatContract.presenter
 
     @Override
     public void uploadFileProgress(Context context, Activity activity, Uri fileUri, ProgressHandler.onProgressFile handler) {
+
+//        RequestUploadFile uploadFile = new RequestUploadFile.Builder(activity, uri)
+//                .build();
+//
+//        chat.uploadFileProgress(uploadFile, new ProgressHandler.onProgressFile() {
+//            @Override
+//            public void onFinish(String imageJson, FileUpload fileImageUpload) {
+//
+//            }
+//
+//            @Override
+//            public void onError(String jsonError, ErrorOutPut error) {
+//
+//            }
+//
+//            @Override
+//            public void onProgress(String uniqueId, int bytesSent, int totalBytesSent, int totalBytesToSend) {
+//
+//            }
+//
+//        });
         chat.uploadFileProgress(context, activity, null, fileUri, handler);
     }
 

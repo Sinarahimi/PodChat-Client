@@ -24,7 +24,7 @@ public abstract class ProgressHandler {
     }
 
     public interface onProgressFile {
-        void onProgressUpdate(int bytesSent);
+//        void onProgressUpdate(int bytesSent);
 
         default void onProgress(String uniqueId, int bytesSent, int totalBytesSent, int totalBytesToSend) {
         }

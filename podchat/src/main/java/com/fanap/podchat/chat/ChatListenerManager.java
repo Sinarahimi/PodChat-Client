@@ -43,7 +43,7 @@ public class ChatListenerManager {
     public ChatListenerManager() {
     }
 
-    public void addListener(@Nullable ChatListener listener, boolean log) {
+    public void addListener(@Nullable ChatListener listener) {
         if (listener == null) {
             return;
         }
@@ -572,7 +572,23 @@ public class ChatListenerManager {
         }
     }
 
-    public void callonSetRuleToUser(String toJson, ChatResponse<ResultSetAdmin> chatResponse) {
+    public void callOnSetRuleToUser(String content, ChatResponse<ResultSetAdmin> chatResponse) {
+        for (ChatListener listener : getSynchronizedListeners()) {
+            try {
+                listener.OnSetRuleToUser(content);
+            } catch (Throwable t) {
+                callHandleCallbackError(listener, t);
+            }
+        }
+    }
 
+    public void callOnGetNotSeenDuration(String content) {
+        for (ChatListener listener : getSynchronizedListeners()) {
+            try {
+                listener.OnGetNotSeenDuration(content);
+            } catch (Throwable t) {
+                callHandleCallbackError(listener, t);
+            }
+        }
     }
 }
